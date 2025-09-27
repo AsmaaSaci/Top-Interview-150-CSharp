@@ -10,9 +10,16 @@ public class Solution {
         }
         projects.Sort((a, b) => a.cap.CompareTo(b.cap));
 
-        var maxHeap = new SortedSet<(int prof, int index)>(Comparer<(int prof, int index)>.Create(
-            (a, b) => a.prof == b.prof ? a.index - b.index : b.prof - a.prof
-        ));
-
+        var maxHeap = new PriorityQueue<int, int>(); // max-heap by using negative priority
         int idx = 0;
         for (int i = 0; i < k; i++) {
+            while (idx < n && projects[idx].cap <= w) {
+                maxHeap.Enqueue(projects[idx].prof, -projects[idx].prof);
+                idx++;
+            }
+            if (maxHeap.Count == 0) break;
+            w += maxHeap.Dequeue();
+        }
+        return w;
+    }
+}
