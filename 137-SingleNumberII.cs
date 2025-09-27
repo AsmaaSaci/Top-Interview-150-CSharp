@@ -1,9 +1,10 @@
 public class Solution {
     public int SingleNumber(int[] nums) {
-        int result = 0;
+        int ones = 0, twos = 0;
         foreach (int num in nums) {
-            result ^= num;
+            ones = (ones ^ num) & ~twos;
+            twos = (twos ^ num) & ~ones;
         }
-        return result;
+        return ones;
     }
 }
