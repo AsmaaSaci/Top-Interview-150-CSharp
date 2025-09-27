@@ -1,24 +1,22 @@
+using System;
 using System.Collections.Generic;
 
 public class MedianFinder {
-    private PriorityQueue<int, int> maxHeap; // left half
-    private PriorityQueue<int, int> minHeap; // right half
+    private List<int> list;
 
     public MedianFinder() {
-        maxHeap = new PriorityQueue<int, int>(Comparer<int>.Create((a, b) => b - a)); // max-heap
-        minHeap = new PriorityQueue<int, int>(); // min-heap
+        list = new List<int>();
     }
 
     public void AddNum(int num) {
-        maxHeap.Enqueue(num, num);
-        minHeap.Enqueue(maxHeap.Dequeue(), maxHeap.Peek());
-        if (maxHeap.Count < minHeap.Count) {
-            maxHeap.Enqueue(minHeap.Dequeue(), minHeap.Peek());
-        }
+        int idx = list.BinarySearch(num);
+        if (idx < 0) idx = ~idx;
+        list.Insert(idx, num);
     }
 
     public double FindMedian() {
-        if (maxHeap.Count > minHeap.Count) return maxHeap.Peek();
-        return (maxHeap.Peek() + minHeap.Peek()) / 2.0;
+        int n = list.Count;
+        if (n % 2 == 1) return list[n / 2];
+        return (list[(n - 1) / 2] + list[n / 2]) / 2.0;
     }
 }
